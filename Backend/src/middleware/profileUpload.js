@@ -22,10 +22,10 @@ cloudinary.config({
   api_secret: process.env.api_secret,
 });
 
-const uploadImage = (req, res, next) => {
+const profileUpload = (req, res, next) => {
   console.log("Starting image upload process...");
   
-  upload.single("blog_image")(req, res, async (err) => {
+  upload.single("profilePic")(req, res, async (err) => {
     if (err) {
       console.error("Multer error:", err.message);
       return res.status(400).json({ message: err.message });
@@ -34,21 +34,21 @@ const uploadImage = (req, res, next) => {
     console.log("File uploaded:", req.file);
     if (!req.file) {
       console.log("No file uploaded.");
-      return next(); // No file uploaded, proceed to the next middleware
+      return next(); 
     }
 
     try {
-      // Upload to Cloudinary
+     
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "Product-IMG",
       });
 
       console.log("Cloudinary upload result:", result);
 
-      // Add Cloudinary URL to req.body
-      req.body.blog_image = result.secure_url;
+     
+      req.body.profilePic = result.secure_url;
 
-      // Delete local file
+      
       fs.unlink(req.file.path, (unlinkErr) => {
         if (unlinkErr) {
           console.error("Error deleting local file:", unlinkErr);
@@ -57,7 +57,7 @@ const uploadImage = (req, res, next) => {
         }
       });
 
-      next(); // Proceed to the next middleware
+      next(); 
     } catch (uploadErr) {
       console.error("Cloudinary upload error:", uploadErr);
       res.status(500).json({
@@ -68,4 +68,4 @@ const uploadImage = (req, res, next) => {
   });
 };
 
-module.exports = uploadImage;
+module.exports = profileUpload ;

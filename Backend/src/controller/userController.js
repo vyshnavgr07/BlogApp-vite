@@ -53,6 +53,8 @@ return res.status(201).json({
 const login=async(req,res)=>{
     try {
         const {email,password}=req.body;
+        console.log(email,"email",password,"passwrd");
+        
         if(!email || !password){
             return res.status(200).json({
                 status:'failed',
@@ -61,9 +63,15 @@ const login=async(req,res)=>{
         }
 
         const existingUser=await User.findOne({email});
-        const istrue=await bcrypt.compareSync(password,existingUser.password); 
+        if(!existingUser){
+            return res.status(400).json({
+                status:'failed',
+                message:'user not found'
+            })
+        }
+        const istrue=bcrypt.compareSync(password,existingUser.password); 
          if(istrue){
-            const token=await jwt.sign({
+            const token= jwt.sign({
                 data:existingUser
               },process.env.SECRET,{ expiresIn: 60 * 60 });
 
@@ -93,6 +101,31 @@ const login=async(req,res)=>{
 }
 
 
+const getUser=async(req,res)=>{
+try {
+    const decoded =req.decode
+    console.log(decoded,"decode");
+    
+    const user=await User.findById();
+    if(!user){
+        return res.status(404).json({
+            status:'failed',
+            message:'user not found'
+        })
+    }
+    return res.status(200).json({
+        status:'success',
+        message:'succesfully logedin',
+        user
+    })
+} catch (error) {
+    console.log(error);
+    return res.status(500).json({
+        status:'failed',
+        message:'internal server error'
+    })
+}
+}
 
 
 
@@ -102,4 +135,4 @@ const login=async(req,res)=>{
 
 
 
-module.exports={registration,login}
+module.exports={registration,login,getUser}

@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Blog = () => {
+ 
   return (
     <div>
          <div className="container mx-auto px-4 py-8 ">

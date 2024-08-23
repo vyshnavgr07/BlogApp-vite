@@ -7,6 +7,7 @@ const uploadImage=require('../middleware/imageUploads');
 blogRouter.use(verifyToken)
 blogRouter.post('/',uploadImage,blogcontroller.createBlog)
 .get('/',blogcontroller.getBlog)
+.get('/:id',blogcontroller.getBlogById)
 .put('/:id',blogcontroller.updateBlog)
 .delete('/:id',blogcontroller.deleteBlog)
 

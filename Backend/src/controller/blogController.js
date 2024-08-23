@@ -1,5 +1,5 @@
 const Blog=require('../models/blogSchema');
-
+const mongoose=require('mongoose')
 
 
 const createBlog=async(req,res)=>{
@@ -39,7 +39,7 @@ const getBlog=async(req,res)=>{
         const blog=await Blog.find();
         return res.status(201).json({
             status:'success',
-            message:'succesfully created',
+            message:'succesfully fetched',
             blog
        })
      } catch (error) {
@@ -94,7 +94,31 @@ const updateBlog = async (req, res) => {
           });
     }
   }
+
+  
+const getBlogById=async(req,res)=>{
+  try {
+    const {id}=req.params;
+    console.log(id,"idddd");
+    
+  
+    
+      const blog=await Blog.findById({_id:id});
+      return res.status(200).json({
+          status:'success',
+          message:'succesfully fetched',
+          blog
+     })
+   } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+          status:'failed',
+          message:'internal server error'
+      })
+  }
+}
+
   
 
-module.exports={createBlog,getBlog,updateBlog,deleteBlog}
+module.exports={createBlog,getBlog,updateBlog,deleteBlog,getBlogById}
 
