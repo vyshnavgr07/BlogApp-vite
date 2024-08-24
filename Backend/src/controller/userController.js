@@ -1,4 +1,5 @@
 const User=require('../models/userSchema');
+
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken')
 const {joiUserSchema}=require('../models/validateSchema')
@@ -53,9 +54,7 @@ return res.status(201).json({
 const login=async(req,res)=>{
     try {
         const {email,password}=req.body;
-        console.log(email,"email",password,"passwrd");
-        
-        if(!email || !password){
+       if(!email || !password){
             return res.status(200).json({
                 status:'failed',
                 message:'user credentails not complete'
@@ -103,10 +102,11 @@ const login=async(req,res)=>{
 
 const getUser=async(req,res)=>{
 try {
-    const decoded =req.decode
-    console.log(decoded,"decode");
+    const decoded= req.decoded;
+    const {_id}=decoded.data
+    console.log(_id,"decode");
     
-    const user=await User.findById();
+    const user=await User.findById(_id);
     if(!user){
         return res.status(404).json({
             status:'failed',

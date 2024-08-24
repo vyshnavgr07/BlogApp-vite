@@ -1,6 +1,6 @@
 const Blog=require('../models/blogSchema');
 const mongoose=require('mongoose')
-
+const Comment=require('../models/commentSchema')
 
 const createBlog=async(req,res)=>{
     try {
@@ -118,7 +118,46 @@ const getBlogById=async(req,res)=>{
   }
 }
 
+
+
+const addComment = async (req, res) => {
+  try {
+      const {_id} = req.decoded.data;
+      const blogId=req.params.blogId
+     
+console.log(blogId,"blooo");
+
+      const data = req.body;
+      const comment = await new Comment({ userId:_id,blogId:blogId,...data });
+      const savedComment = await comment.save();
+      return res.status(200).json({
+          status: 'succes',
+          message: 'succesfully updated',
+          savedComment
+      })
+  } catch (error) {
+      console.log(error);
+
+  }
+}
+
+const getComment=async(req,res)=>{
+try {
+  const id=req.params.id
+
+  const getcom=await Comment.find({blogId:id}).populate("userId").populate("blogId");
+  return res.status(200).json({
+      status: 'succes',
+      message: 'succesfully updated',
+      getcom
+  })
+} catch (error) {
+  console.log(error);
+  
+}
+}
   
 
-module.exports={createBlog,getBlog,updateBlog,deleteBlog,getBlogById}
+module.exports={createBlog,getBlog,updateBlog,deleteBlog,getBlogById,addComment,getComment}
+
 

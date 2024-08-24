@@ -10,10 +10,11 @@ blogRouter.post('/',uploadImage,blogcontroller.createBlog)
 .get('/:id',blogcontroller.getBlogById)
 .put('/:id',blogcontroller.updateBlog)
 .delete('/:id',blogcontroller.deleteBlog)
+.post('/comment/:blogId',blogcontroller.addComment)
+.get('/comment/:id',blogcontroller.getComment)
 
 
-
-
+   
 
 
 module.exports=blogRouter;          
